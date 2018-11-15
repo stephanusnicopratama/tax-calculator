@@ -24,11 +24,11 @@ services:
       MYSQL_PASSWORD: ""
       MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
       MYSQL_ROOT_PASSWORD: ""
-    command: --log-bin=/var/lib/mysql/mysql-bin.log --binlog-format=ROW --server-id=1
     ports:
     - .:3306:3306
+    user: "1000:50"
     volumes:
-    - "./data:/var/lib/mysql/data:rw"
+    - "./data:/var/lib/mysql:rw"
     networks:
     - webproxy
 
