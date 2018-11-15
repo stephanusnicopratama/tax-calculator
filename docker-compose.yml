@@ -1,0 +1,38 @@
+version: "3"
+
+services:
+  app:
+    image: golang:1.11.2-alpine
+    container_name: golang
+    working_dir: /go/src/tax-calculator
+    command: go run main.go
+    depends_on:
+    - "database"
+    ports:
+    - "8081:8081"
+    volumes:
+    - .:/go/src/tax-calculator
+    networks:
+    - webproxy
+
+  database:
+    image: mysql
+    container_name: mysql
+    environment:
+      MYSQL_DATABASE: "tax-calculator"
+      MYSQL_USER: "root"
+      MYSQL_PASSWORD: ""
+      MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
+      MYSQL_ROOT_PASSWORD: ""
+    command: --log-bin=/var/lib/mysql/mysql-bin.log --binlog-format=ROW --server-id=1
+    ports:
+    - .:3306:3306
+    volumes:
+    - "./data:/var/lib/mysql/data:rw"
+    networks:
+    - webproxy
+
+networks:
+  webproxy:
+    driver: bridge
+
